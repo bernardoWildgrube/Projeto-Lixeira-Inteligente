@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lixeiras Inteligentes</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <main id="login-view" class="login-view">
+        <section class="login-panel">
+            <p class="eyebrow">Prefeitura</p>
+            <h1>Lixeiras Inteligentes</h1>
+            <form id="login-form" method="get" action="/painel.html" autocomplete="off">
+                <label for="usuario">Usuario</label>
+                <input id="usuario" name="usuario" type="text" autocomplete="off" required>
+                <label for="senha">Senha</label>
+                <input id="senha" name="senha" type="password" autocomplete="new-password" required>
+                <button id="entrar-button" type="submit">Entrar</button>
+                <a class="direct-panel-link" href="/painel.html">Abrir painel diretamente</a>
+                <p id="login-error" class="error" hidden>Usuario ou senha incorretos.</p>
+            </form>
+        </section>
+    </main>
+
+    <main id="app-view" class="app-view" hidden>
+        <aside class="sidebar">
+            <div>
+                <p class="eyebrow">Monitoramento</p>
+                <h1>Lixeiras Inteligentes</h1>
+            </div>
+            <nav>
+                <a href="#mapa">Mapa</a>
+                <a href="#cadastro">Cadastro</a>
+                <a href="#logs">Logs</a>
+                <a href="/api/export/logs.csv">Exportar CSV</a>
+            </nav>
+            <button id="logout-button" class="secondary">Sair</button>
+        </aside>
+
+        <section class="content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Endereco do sistema</p>
+                    <strong>http://10.1.25.112:5000</strong>
+                </div>
+                <div class="summary">
+                    <span><strong id="total-lixeiras">0</strong> lixeiras</span>
+                    <span><strong id="total-alertas">0</strong> alertas</span>
+                </div>
+            </header>
+
+            <section id="mapa" class="map-section">
+                <div id="map"></div>
+                <div id="alertas" class="alert-list"></div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Estado atual</p>
+                        <h2>Lixeiras cadastradas</h2>
+                    </div>
+                    <button id="refresh-button" class="secondary">Atualizar</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Identificador</th>
+                                <th>Nome</th>
+                                <th>Endereco</th>
+                                <th>Nivel</th>
+                                <th>Livre</th>
+                                <th>Tampa</th>
+                                <th>Status</th>
+                                <th>Atualizacao</th>
+                                <th>Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lixeiras-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="cadastro" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Gerenciamento</p>
+                        <h2 id="form-title">Cadastrar lixeira</h2>
+                    </div>
+                    <button id="cancel-edit" class="secondary" hidden>Cancelar edicao</button>
+                </div>
+                <form id="lixeira-form" class="grid-form">
+                    <input type="hidden" id="lixeira-id">
+                    <label>Identificador unico
+                        <input id="identificador" required placeholder="LIX-003">
+                    </label>
+                    <label>Nome
+                        <input id="nome" required placeholder="Lixeira Escola Municipal">
+                    </label>
+                    <label>Endereco
+                        <input id="endereco" required placeholder="Rua A, 123">
+                    </label>
+                    <label>Latitude
+                        <input id="latitude" type="number" step="0.000001" required>
+                    </label>
+                    <label>Longitude
+                        <input id="longitude" type="number" step="0.000001" required>
+                    </label>
+                    <label>Capacidade total estimada
+                        <input id="capacidade_total" type="number" min="1" value="100" required>
+                    </label>
+                    <label>Status operacional
+                        <select id="status_operacional">
+                            <option value="ativa">Ativa</option>
+                            <option value="inativa">Inativa</option>
+                        </select>
+                    </label>
+                    <button type="submit">Salvar</button>
+                </form>
+            </section>
+
+            <section id="logs" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Historico</p>
+                        <h2>Logs de atualizacao</h2>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Horario</th>
+                                <th>Lixeira</th>
+                                <th>Evento</th>
+                                <th>Nivel</th>
+                                <th>Livre</th>
+                                <th>Tampa</th>
+                                <th>Mensagem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        function loginDireto(event) {
+            if (event) event.preventDefault();
+
+            const usuario = document.getElementById("usuario").value.trim();
+            const senha = document.getElementById("senha").value;
+            const erro = document.getElementById("login-error");
+
+            if (usuario === "admin" && senha === "senha123") {
+                localStorage.setItem("lixeiraLoggedIn", "true");
+                erro.hidden = true;
+                document.getElementById("login-view").hidden = true;
+                document.getElementById("app-view").hidden = false;
+
+                if (typeof showApp === "function") {
+                    showApp();
+                }
+            } else {
+                erro.textContent = "Usuario ou senha incorretos. Use admin e senha123.";
+                erro.hidden = false;
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/script.js?v=3"></script>
+</body>
+</html>

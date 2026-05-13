@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lixeiras Inteligentes</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="/style.css?v=10">
+</head>
+<body class="dashboard-body">
+    <header class="app-header">
+        <div>
+            <span class="eyebrow">Prefeitura</span>
+            <h1>Lixeiras Inteligentes</h1>
+        </div>
+        <nav class="top-nav">
+            <button class="nav-button active" data-tab="painel">Painel</button>
+            <button class="nav-button" data-tab="mapa">Mapa</button>
+            <button class="nav-button" data-tab="cadastro">Cadastro</button>
+            <button class="nav-button" data-tab="lixeiras">Lixeiras</button>
+        </nav>
+        <a class="logout-link" href="/">Sair</a>
+    </header>
+
+    <main class="dashboard">
+        <section class="stats-row">
+            <article>
+                <span>Total</span>
+                <strong id="total-lixeiras">0</strong>
+            </article>
+            <article>
+                <span>Alertas</span>
+                <strong id="total-alertas">0</strong>
+            </article>
+            <article>
+                <span>Ativas</span>
+                <strong id="total-ativas">0</strong>
+            </article>
+        </section>
+
+        <section id="tab-painel" class="tab-panel active">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">Visao geral</span>
+                    <h2>Painel principal</h2>
+                </div>
+            </div>
+            <div id="painel-resumo" class="overview-grid"></div>
+        </section>
+
+        <section id="tab-mapa" class="tab-panel">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">Mapa em tempo real</span>
+                    <h2>Localizacao das lixeiras</h2>
+                </div>
+                <button id="refresh-button" class="secondary">Atualizar</button>
+            </div>
+            <div class="map-layout">
+                <div id="map"></div>
+                <aside id="alertas" class="alert-list"></aside>
+            </div>
+        </section>
+
+        <section id="tab-cadastro" class="tab-panel">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">Gerenciamento</span>
+                    <h2 id="form-title">Cadastrar lixeira</h2>
+                </div>
+                <button id="cancel-edit" class="secondary" hidden>Cancelar edicao</button>
+            </div>
+
+            <form id="lixeira-form" class="grid-form">
+                <input type="hidden" id="lixeira-id">
+                <label>Identificador unico
+                    <input id="identificador" required placeholder="LIX-003">
+                </label>
+                <label>Nome
+                    <input id="nome" required placeholder="Lixeira Escola Municipal">
+                </label>
+                <label>Endereco
+                    <input id="endereco" required placeholder="Rua A, 123">
+                </label>
+                <label>Latitude
+                    <input id="latitude" type="number" step="0.000001" required placeholder="-28.2621">
+                </label>
+                <label>Longitude
+                    <input id="longitude" type="number" step="0.000001" required placeholder="-52.4065">
+                </label>
+                <label>Capacidade total
+                    <input id="capacidade_total" type="number" min="1" step="0.01" value="100" required>
+                </label>
+                <label>Capacidade utilizada
+                    <input id="capacidade_utilizada" type="number" min="0" step="0.01" value="0" required>
+                </label>
+                <label>Tampa
+                    <select id="tampa_status">
+                        <option value="fechada">Fechada</option>
+                        <option value="aberta">Aberta</option>
+                    </select>
+                </label>
+                <label>Status operacional
+                    <select id="status_operacional">
+                        <option value="ativa">Ativa</option>
+                        <option value="inativa">Inativa</option>
+                    </select>
+                </label>
+                <div class="calc-preview">
+                    <span>Ocupacao calculada</span>
+                    <strong id="ocupacao-preview">0% cheia | 100% livre</strong>
+                </div>
+                <button type="submit">Salvar lixeira</button>
+            </form>
+        </section>
+
+        <section id="tab-lixeiras" class="tab-panel">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">Estado atual</span>
+                    <h2>Lixeiras cadastradas</h2>
+                </div>
+            </div>
+            <div id="lixeiras-cards" class="cards-grid"></div>
+        </section>
+    </main>
+
+    <script>
+        localStorage.setItem("lixeiraLoggedIn", "true");
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/script.js?v=10"></script>
+</body>
+</html>
