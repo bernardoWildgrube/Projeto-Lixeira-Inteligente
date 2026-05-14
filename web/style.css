@@ -309,6 +309,30 @@ select {
     gap: 14px;
 }
 
+.table-wrap {
+    overflow-x: auto;
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.logs-table th,
+.logs-table td {
+    border-bottom: 1px solid var(--line);
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.logs-table th {
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
 .overview-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(180px, 1fr));

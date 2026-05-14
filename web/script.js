@@ -194,6 +194,49 @@ function renderCards(lixeiras) {
     `).join("");
 }
 
+function renderLogs(logs) {
+    const body = document.getElementById("logs-body");
+    if (!body) return;
+
+    if (logs.length === 0) {
+        body.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">Nenhum log registrado ainda.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    body.innerHTML = logs.map((log) => `
+        <tr>
+            <td>${formatDate(log.criado_em)}</td>
+            <td>${log.nome || log.identificador}</td>
+            <td>${log.evento}</td>
+            <td>${Number(log.nivel_ocupacao).toFixed(0)}%</td>
+            <td>${Number(log.espaco_livre).toFixed(0)}%</td>
+            <td>${log.tampa_status}</td>
+            <td>${log.mensagem || ""}</td>
+        </tr>
+    `).join("");
+}
+
+async function carregarLogs() {
+    try {
+        const logs = await api("/logs");
+        renderLogs(logs);
+    } catch (error) {
+        console.error(error);
+        const body = document.getElementById("logs-body");
+        if (body) {
+            body.innerHTML = `
+                <tr>
+                    <td colspan="7" class="error">Erro ao carregar logs.</td>
+                </tr>
+            `;
+        }
+    }
+}
+
 function renderPainelResumo(lixeiras) {
     const container = document.getElementById("painel-resumo");
     if (!container) return;
@@ -243,12 +286,16 @@ function atualizarResumo(lixeiras) {
 
 async function carregarTudo() {
     try {
-        const lixeiras = await api("/lixeiras");
+        const [lixeiras, logs] = await Promise.all([
+            api("/lixeiras"),
+            api("/logs"),
+        ]);
         lixeirasCache = lixeiras;
         atualizarResumo(lixeiras);
         renderPainelResumo(lixeiras);
         renderAlertas(lixeiras);
         renderCards(lixeiras);
+        renderLogs(logs);
         atualizarMapa(lixeiras);
     } catch (error) {
         console.error(error);
@@ -343,6 +390,7 @@ function iniciarPainelSeExistir() {
     });
 
     document.getElementById("refresh-button").addEventListener("click", carregarTudo);
+    document.getElementById("refresh-logs-button").addEventListener("click", carregarLogs);
     document.getElementById("cancel-edit").addEventListener("click", limparFormulario);
     document.getElementById("capacidade_total").addEventListener("input", atualizarPreviewCapacidade);
     document.getElementById("capacidade_utilizada").addEventListener("input", atualizarPreviewCapacidade);
