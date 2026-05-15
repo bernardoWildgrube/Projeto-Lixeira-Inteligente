@@ -1,0 +1,13 @@
+criado_em,identificador,nome,endereco,evento,nivel_ocupacao,espaco_livre,tampa_status,mensagem
+2026-05-13T10:19:43-03:00,Lixo 01,Lixeira Bella,"Centro, Passo Fundo - Rio Grande do Sul",cadastro,33.33,66.67,fechada,Lixeira cadastrada
+2026-05-13T10:19:57-03:00,Lixo 01,Lixeira Bella,"Centro, Passo Fundo - Rio Grande do Sul",edicao,33.33,66.67,fechada,Dados cadastrais atualizados
+2026-05-13T10:23:30-03:00,Lixo 01,Lixeira Bella,"Centro, Passo Fundo - Rio Grande do Sul",edicao,33.33,66.67,fechada,Dados cadastrais atualizados
+2026-05-13T10:25:19-03:00,Lixo 02,Lixeira Passo Fundo Shopping,"Av. Pres. Vargas, 1610, em Passo Fundo - RS",cadastro,78.0,22.0,fechada,Lixeira cadastrada
+2026-05-13T10:28:51-03:00,Lixo 01,Lixeira Bella,"Centro, Passo Fundo - Rio Grande do Sul",edicao,33.33,66.67,fechada,Dados cadastrais atualizados
+2026-05-13T10:29:05-03:00,Lixo 02,Lixeira Passo Fundo Shopping,"Av. Pres. Vargas, 1610, em Passo Fundo - RS",edicao,78.0,22.0,fechada,Dados cadastrais atualizados
+2026-05-13T11:24:25-03:00,lix - 03,Lixo Gare,Parque da Gare,cadastro,0.0,100.0,fechada,Lixeira cadastrada
+2026-05-13T11:24:39-03:00,lix - 03,Lixo Gare,Parque da Gare,edicao,0.0,100.0,fechada,Dados cadastrais atualizados
+2026-05-13T11:24:43-03:00,lix - 03,Lixo Gare,Parque da Gare,edicao,0.0,100.0,fechada,Dados cadastrais atualizados
+2026-05-13T11:24:51-03:00,lix - 03,Lixo Gare,Parque da Gare,edicao,99.6,0.4000000000000057,fechada,Dados cadastrais atualizados
+2026-05-13T11:25:05-03:00,lix - 03,Lixo Gare,Parque da Gare,edicao,100.0,0.0,fechada,Dados cadastrais atualizados
+2026-05-13T11:27:36-03:00,Lixo 03,Lixo Gare,Parque da Gare,edicao,96.0,4.0,fechada,Dados cadastrais atualizados
